@@ -24,6 +24,9 @@ function createGrid() {
         grid.appendChild(cell);
     }
 }
+function startGame() {
+    document.querySelector(".grid").style.display = "grid";
+}
 
+document.querySelector(".start-button").addEventListener('click', startGame);
 createGrid();
-document.querySelector('.start-button').addEventListener('click', startGame);
