@@ -1,9 +1,6 @@
 const GRID_ROWS = 10;
 const GRID_COLS = 10;
 const PLANE_PARTS = 3;
-const TIME_LIMIT = 60;
-
-let timeLeft, timer;
 
 function createGrid() {
     const grid = document.querySelector(".grid");
@@ -57,10 +54,6 @@ function startGame() {
 
     // place plane parts
     placePlaneParts();
-
-    // start the timer
-    timeLeft = TIME_LIMIT;
-    timer = setInterval(countdown, 1000);
 }
 
 function stopGame() {
@@ -74,20 +67,6 @@ function stopGame() {
     button.style.backgroundColor = "#4CAF50"; // change button color back to green
     button.removeEventListener("click", stopGame);
     button.addEventListener("click", startGame);
-
-    // stop the timer
-    clearInterval(timer);
-}
-
-function countdown() {
-    const timerElement = document.querySelector(".timer");
-    timeLeft--;
-    timerElement.innerText = `Time Left: ${timeLeft}`;
-
-    if (timeLeft === 0) {
-        stopGame();
-        alert("Time's up! Game over.");
-    }
 }
 
 // create grid on page load
