@@ -8,6 +8,11 @@ function createGrid() {
     // Clear any existing cells
     grid.innerHTML = "";
 
+    // Set the number of rows and columns
+    grid.style.setProperty("--num-rows", GRID_ROWS);
+    grid.style.setProperty("--num-cols", GRID_COLS);
+
+    // Add cells to the grid
     for (let row = 0; row < GRID_ROWS; row++) {
         for (let col = 0; col < GRID_COLS; col++) {
             const cell = document.createElement("div");

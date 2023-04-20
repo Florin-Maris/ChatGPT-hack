@@ -43,10 +43,10 @@ main p {
 
 .grid {
     display: none;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(10, 1fr);
+    grid-template-columns: repeat(var(--num-cols), 1fr);
+    grid-template-rows: repeat(var(--num-rows), 1fr);
     grid-gap: 4px;
-    width: 500px;
+    max-width: 100%;
 }
 
 .grid div {
