@@ -57,6 +57,10 @@ main p {
     width: 50px;
 }
 
+.grid div.black {
+    background-color: #000;
+}
+
 .start-button {
     background-color: #4CAF50;
     border: none;

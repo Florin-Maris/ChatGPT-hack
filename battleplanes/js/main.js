@@ -28,21 +28,16 @@ function placePlaneParts() {
     const cells = document.querySelectorAll(".cell");
 
     // Clear any existing plane parts
-    cells.forEach((cell) => cell.classList.remove("plane-part"));
-
-    // Select random cells to be plane parts
-    const planePartIndices = [];
-    while (planePartIndices.length < PLANE_PARTS) {
-        const index = Math.floor(Math.random() * GRID_ROWS * GRID_COLS);
-        if (!planePartIndices.includes(index)) {
-            planePartIndices.push(index);
-        }
-    }
-
-    // Add plane parts to selected cells
-    planePartIndices.forEach((index) => {
-        cells[index].classList.add("plane-part");
+    cells.forEach((cell) => {
+        cell.classList.remove("plane-part");
+        cell.classList.remove("black");
     });
+
+    // Select random cell to turn black
+    const blackIndex = Math.floor(Math.random() * GRID_ROWS * GRID_COLS);
+
+    // Add black class to selected cell
+    cells[blackIndex].classList.add("black");
 }
 
 function startGame() {
