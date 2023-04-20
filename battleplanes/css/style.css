@@ -45,7 +45,7 @@ main p {
     display: none;
     grid-template-columns: repeat(var(--num-cols), 1fr);
     grid-template-rows: repeat(var(--num-rows), 1fr);
-    grid-gap: 4px;
+    grid-gap: 0;
     max-width: 100%;
 }
 
