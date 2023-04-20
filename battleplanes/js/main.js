@@ -23,11 +23,6 @@ function createGrid() {
         cell.setAttribute('data-id', i);
         grid.appendChild(cell);
     }
-    grid.style.gridGap = '4px';
-    grid.style.display = 'grid';
-    grid.style.gridTemplateColumns = 'repeat(10, 1fr)';
-    grid.style.gridTemplateRows = 'repeat(10, 1fr)';
-    grid.style.width = '500px';
 }
 
 function generatePlane() {

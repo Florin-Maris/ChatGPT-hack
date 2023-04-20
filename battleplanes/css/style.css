@@ -5,7 +5,10 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 header {
@@ -38,7 +41,8 @@ main p {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
-    gap: 5px;
+    grid-gap: 4px;
+    width: 500px;
 }
 
 .grid div {
