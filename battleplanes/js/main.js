@@ -60,6 +60,7 @@ function startGame() {
     // change the button text and functionality
     const button = document.querySelector(".start-button");
     button.innerText = "Stop Game";
+    button.style.backgroundColor = "red"; // change button color to red
     button.removeEventListener("click", startGame);
     button.addEventListener("click", stopGame);
 
@@ -76,6 +77,7 @@ function stopGame() {
     // change the button text and functionality
     const button = document.querySelector(".start-button");
     button.innerText = "Start Game";
+    button.style.backgroundColor = "#4CAF50"; // change button color back to green
     button.removeEventListener("click", stopGame);
     button.addEventListener("click", startGame);
 
