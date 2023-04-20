@@ -1,55 +1,46 @@
-// Define constants
-const GRID_SIZE = 10;
-const PLANE_PARTS = [
-    {
-        type: "wing",
-        cells: [
-            { x: 0, y: 0 },
-            { x: 1, y: 0 },
-            { x: 2, y: 0 },
-            { x: 3, y: 0 },
-            { x: 4, y: 0 },
-        ],
-    },
-    {
-        type: "wing",
-        cells: [
-            { x: 0, y: 1 },
-            { x: 1, y: 1 },
-            { x: 2, y: 1 },
-            { x: 3, y: 1 },
-            { x: 4, y: 1 },
-        ],
-    },
-    { type: "body", cells: [{ x: 5, y: 1 }] },
-    {
-        type: "tail",
-        cells: [
-            { x: 8, y: 1 },
-            { x: 9, y: 1 },
-            { x: 9, y: 2 },
-        ],
-    },
-];
+const GRID_ROWS = 10;
+const GRID_COLS = 10;
+const PLANE_PARTS = 3;
+const TIME_LIMIT = 60;
 
-// Define variables
-let planeCells = [];
-const TIME_LIMIT = 300;
-let timeLeft = TIME_LIMIT;
-let timer;
-
-// Define functions
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
+let timeLeft, timer;
 
 function createGrid() {
     const grid = document.querySelector(".grid");
-    for (let i = 0; i < 100; i++) {
-        const cell = document.createElement("div");
-        cell.setAttribute("data-id", i);
-        grid.appendChild(cell);
+
+    // Clear any existing cells
+    grid.innerHTML = "";
+
+    for (let row = 0; row < GRID_ROWS; row++) {
+        for (let col = 0; col < GRID_COLS; col++) {
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.dataset.row = row;
+            cell.dataset.col = col;
+            grid.appendChild(cell);
+        }
     }
+}
+
+function placePlaneParts() {
+    const cells = document.querySelectorAll(".cell");
+
+    // Clear any existing plane parts
+    cells.forEach((cell) => cell.classList.remove("plane-part"));
+
+    // Select random cells to be plane parts
+    const planePartIndices = [];
+    while (planePartIndices.length < PLANE_PARTS) {
+        const index = Math.floor(Math.random() * GRID_ROWS * GRID_COLS);
+        if (!planePartIndices.includes(index)) {
+            planePartIndices.push(index);
+        }
+    }
+
+    // Add plane parts to selected cells
+    planePartIndices.forEach((index) => {
+        cells[index].classList.add("plane-part");
+    });
 }
 
 function startGame() {
@@ -63,6 +54,9 @@ function startGame() {
     button.style.backgroundColor = "red"; // change button color to red
     button.removeEventListener("click", startGame);
     button.addEventListener("click", stopGame);
+
+    // place plane parts
+    placePlaneParts();
 
     // start the timer
     timeLeft = TIME_LIMIT;
@@ -85,5 +79,20 @@ function stopGame() {
     clearInterval(timer);
 }
 
-document.querySelector(".start-button").addEventListener("click", startGame);
-createGrid();
+function countdown() {
+    const timerElement = document.querySelector(".timer");
+    timeLeft--;
+    timerElement.innerText = `Time Left: ${timeLeft}`;
+
+    if (timeLeft === 0) {
+        stopGame();
+        alert("Time's up! Game over.");
+    }
+}
+
+// create grid on page load
+window.addEventListener("load", createGrid);
+
+// attach event listener to start button
+const startButton = document.querySelector(".start-button");
+startButton.addEventListener("click", startGame);

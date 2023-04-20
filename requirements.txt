@@ -2,6 +2,7 @@
     1.a Add a start game button, make it green
     1.b Add a stop game button, make it red
     1.c Hide grid when stopping game and show grid when starting game
+    1.d Index grid positions by rows and columns
 2. Add one plane to the grid consisting of a cockpit, a tail, a body, and two wings. The wings will occupy 5 cells in total, the cockpit will be a triangle occupying one cell, the body will occupy one cell, and the tail will occupy three cells. 3. The plane should be randomly positioned on the grid when the game starts, and the position should change each time the game is played.
 4. The page knows which are the cells occupied by the plane, but they will not be visible to the user.
 5. The user keeps seeing empty cells.
