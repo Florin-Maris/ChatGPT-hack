@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ping Pong Game</title>
     <style>
         canvas {
-            border: 1px solid #000;
-            background-color: #eee;
+            border: 1px solid black;
         }
     </style>
 </head>
@@ -16,35 +15,32 @@
 <script>
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
-
     var ballRadius = 10;
     var x = canvas.width/2;
     var y = canvas.height-30;
     var dx = 2;
     var dy = -2;
-
     var paddleHeight = 10;
     var paddleWidth = 75;
     var paddleX = (canvas.width-paddleWidth)/2;
     var rightPressed = false;
     var leftPressed = false;
-
-    var targetRowCount = 3;
-    var targetColumnCount = 5;
+    var targetRowCount = 6;
+    var targetColumnCount = 10;
     var targetWidth = 75;
     var targetHeight = 20;
     var targetPadding = 10;
     var targetOffsetTop = 30;
     var targetOffsetLeft = 30;
     var targets = [];
+    var score = 0;
+
     for(var c=0; c<targetColumnCount; c++) {
         targets[c] = [];
         for(var r=0; r<targetRowCount; r++) {
             targets[c][r] = { x: 0, y: 0, status: 1 };
         }
     }
-
-    var score = 0;
 
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
@@ -99,21 +95,15 @@
                     var targetY = (r*(targetHeight+targetPadding))+targetOffsetTop;
                     targets[c][r].x = targetX;
                     targets[c][r].y = targetY;
-
                     ctx.beginPath();
                     ctx.rect(targetX, targetY, targetWidth, targetHeight);
-                    ctx.fillStyle = "#0095DD";
+                    if(r
+                        ctx.fillStyle = "#0095DD";
                     ctx.fill();
                     ctx.closePath();
                 }
             }
         }
-    }
-
-    function drawScore() {
-        ctx.font = "16px Arial";
-        ctx.fillStyle = "#0095DD";
-        ctx.fillText("Score: " + score, 8, 20);
     }
 
     function collisionDetection() {
@@ -126,13 +116,19 @@
                         t.status = 0;
                         score++;
                         if(score == targetRowCount*targetColumnCount) {
-                            alert("You win!");
+                            alert("YOU WIN, CONGRATS!");
                             document.location.reload();
                         }
                     }
                 }
             }
         }
+    }
+
+    function drawScore() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#0095DD";
+        ctx.fillText("Score: "+score, 8, 20);
     }
 
     function draw() {
@@ -154,8 +150,9 @@
                 dy = -dy;
             }
             else {
-                alert("Game Over");
+                alert("GAME OVER");
                 document.location.reload();
+                clearInterval(interval); // Needed for Chrome to end game
             }
         }
 
@@ -168,10 +165,9 @@
 
         x += dx;
         y += dy;
-        requestAnimationFrame(draw);
     }
 
-    draw();
+    var interval = setInterval(draw, 10);
 </script>
 </body>
 </html>
