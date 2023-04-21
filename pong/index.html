@@ -4,49 +4,35 @@
     <title>Ping Pong Game</title>
     <style>
         canvas {
-            border: 1px solid black;
-            background-color: #eee;
+            border: 1px solid #000;
         }
     </style>
 </head>
 <body>
-<h1>Ping Pong Game</h1>
-<p>Use the left and right arrow keys to move the paddle and hit the targets.</p>
-<canvas id="myCanvas" width="800" height="600"></canvas>
+<canvas id="myCanvas" width="640" height="480"></canvas>
 <script>
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
-
-    // Ball variables
+    var ballRadius = 10;
     var x = canvas.width/2;
     var y = canvas.height-30;
     var dx = 2;
     var dy = -2;
-    var ballRadius = 10;
-
-    // Paddle variables
     var paddleHeight = 10;
     var paddleWidth = 75;
     var paddleX = (canvas.width-paddleWidth)/2;
-
-    // Input variables
     var rightPressed = false;
     var leftPressed = false;
-
-    // Target variables
-    var targetRowCount = 4;
-    var targetColumnCount = 7;
+    var targetRowCount = 6;
+    var targetColumnCount = 4;
     var targetWidth = 50;
     var targetHeight = 20;
     var targetPadding = 10;
     var targetOffsetTop = 30;
-    var targetOffsetLeft = 30;
-
-    // Score variable
+    var targetOffsetLeft = (canvas.width - (targetColumnCount * (targetWidth + targetPadding))) / 2;
+    var targets = [];
     var score = 0;
 
-    // Create targets array
-    var targets = [];
     for (var c = 0; c < targetColumnCount; c++) {
         targets[c] = [];
         for (var r = 0; r < targetRowCount; r++) {
@@ -54,9 +40,9 @@
         }
     }
 
-    // Event listeners
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
+    document.addEventListener("mousemove", mouseMoveHandler, false);
 
     function keyDownHandler(e) {
         if (e.keyCode == 39) {
@@ -73,6 +59,13 @@
         }
         else if (e.keyCode == 37) {
             leftPressed = false;
+        }
+    }
+
+    function mouseMoveHandler(e) {
+        var relativeX = e.clientX - canvas.offsetLeft;
+        if (relativeX > 0 && relativeX < canvas.width) {
+            paddleX = relativeX - paddleWidth/2;
         }
     }
 
@@ -96,13 +89,12 @@
         for (var c = 0; c < targetColumnCount; c++) {
             for (var r = 0; r < targetRowCount; r++) {
                 if (targets[c][r].status == 1) {
-                    var targetX = (c*(targetWidth+targetPadding))+targetOffsetLeft;
-                    var targetY = (r*(targetHeight+targetPadding))+targetOffsetTop;
+                    var targetX = (c * (targetWidth + targetPadding)) + targetOffsetLeft;
+                    var targetY = (r * (targetHeight + targetPadding)) + targetOffsetTop;
                     targets[c][r].x = targetX;
                     targets[c][r].y = targetY;
                     ctx.beginPath();
-                    ctx.rect(targetX, targetY, targetWidth,
-                        targetHeight);
+                    ctx.rect(targetX, targetY, targetWidth, targetHeight);
                     ctx.fillStyle = "#0095DD";
                     ctx.fill();
                     ctx.closePath();
@@ -126,7 +118,7 @@
                         t.status = 0;
                         score++;
                         if (score == targetRowCount*targetColumnCount) {
-                            alert("You win! Congratulations!");
+                            alert("YOU WIN, CONGRATULATIONS!");
                             document.location.reload();
                         }
                     }
@@ -143,25 +135,23 @@
         drawScore();
         collisionDetection();
 
-        // Bounce off walls
-        if (x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+        if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
             dx = -dx;
         }
         if (y + dy < ballRadius) {
             dy = -dy;
         }
-        else if (y + dy > canvas.height-ballRadius) {
+        else if (y + dy > canvas.height - ballRadius) {
             if (x > paddleX && x < paddleX + paddleWidth) {
                 dy = -dy;
             }
             else {
-                alert("Game over. Your final score is " + score + ".");
+                alert("GAME OVER");
                 document.location.reload();
             }
         }
 
-        // Move paddle
-        if (rightPressed && paddleX < canvas.width-paddleWidth) {
+        if (rightPressed && paddleX < canvas.width - paddleWidth) {
             paddleX += 7;
         }
         else if (leftPressed && paddleX > 0) {
@@ -170,9 +160,10 @@
 
         x += dx;
         y += dy;
+        requestAnimationFrame(draw);
     }
 
-    setInterval(draw, 10);
+    draw();
 </script>
 </body>
 </html>
