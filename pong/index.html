@@ -32,6 +32,9 @@
     var targetOffsetLeft = (canvas.width - (targetColumnCount * (targetWidth + targetPadding))) / 2;
     var targets = [];
     var score = 0;
+    var level = 1;
+    var maxLevel = 5;
+    var targetRowCount = 6 + level;
 
     for (var c = 0; c < targetColumnCount; c++) {
         targets[c] = [];
@@ -107,6 +110,7 @@
         ctx.font = "16px Arial";
         ctx.fillStyle = "#0095DD";
         ctx.fillText("Score: " + score, 8, 20);
+        ctx.fillText("Level: " + level, canvas.width-65, 20);
     }
 
     function collisionDetection() {
@@ -119,14 +123,38 @@
                         t.status = 0;
                         score++;
                         if (score == targetRowCount*targetColumnCount) {
-                            alert("YOU WIN, CONGRATULATIONS!");
-                            document.location.reload();
+                            if (level == maxLevel) {
+                                alert("YOU WIN, CONGRATULATIONS! You have completed all levels.");
+                                document.location.reload();
+                            } else {
+                                level++;
+                                targetRowCount = 6 + level;
+                                resetGame();
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+    function resetGame() {
+        x = canvas.width/2;
+        y = canvas.height-30;
+        dx = 2;
+        dy = -2;
+        paddleX = (canvas.width-paddleWidth)/2;
+        targets = [];
+        score = 0;
+
+        for (var c = 0; c < targetColumnCount; c++) {
+            targets[c] = [];
+            for (var r = 0; r < targetRowCount; r++) {
+                targets[c][r] = { x: 0, y: 0, status: 1 };
+            }
+        }
+    }
+
 
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
