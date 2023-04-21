@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Ping Pong Game</title>
-    <style type="text/css">
-        #canvas {
-            border: 2px solid black;
+    <style>
+        canvas {
+            border: 1px solid #000;
         }
     </style>
 </head>
 <body>
-<canvas id="canvas" width="600" height="400"></canvas>
+<canvas id="myCanvas" width="480" height="320"></canvas>
 
-<script type="text/javascript">
-    var canvas = document.getElementById("canvas");
+<script>
+    var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
-
-    // Ball Variables
+    var ballRadius = 10;
     var x = canvas.width/2;
     var y = canvas.height-30;
     var dx = 2;
     var dy = -2;
-    var ballRadius = 10;
-
-    // Paddle Variables
     var paddleHeight = 10;
     var paddleWidth = 75;
     var paddleX = (canvas.width-paddleWidth)/2;
-
-    // Target Variables
+    var rightPressed = false;
+    var leftPressed = false;
     var targetRowCount = 3;
     var targetColumnCount = 5;
     var targetWidth = 50;
@@ -35,6 +32,8 @@
     var targetPadding = 10;
     var targetOffsetTop = 30;
     var targetOffsetLeft = 30;
+    var score = 0;
+
     var targets = [];
     for(var c=0; c<targetColumnCount; c++) {
         targets[c] = [];
@@ -43,13 +42,9 @@
         }
     }
 
-    // Key Variables
-    var rightPressed = false;
-    var leftPressed = false;
-
-    // Event Listeners
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
+    document.addEventListener("mousemove", mouseMoveHandler, false);
 
     function keyDownHandler(e) {
         if(e.keyCode == 39) {
@@ -66,6 +61,13 @@
         }
         else if(e.keyCode == 37) {
             leftPressed = false;
+        }
+    }
+
+    function mouseMoveHandler(e) {
+        var relativeX = e.clientX - canvas.offsetLeft;
+        if(relativeX > 0 && relativeX < canvas.width) {
+            paddleX = relativeX - paddleWidth/2;
         }
     }
 
@@ -96,6 +98,7 @@
                     ctx.beginPath();
                     ctx.rect(targetX, targetY, targetWidth, targetHeight);
                     ctx.fillStyle = "#0095DD";
+
                     ctx.fill();
                     ctx.closePath();
                 }
@@ -111,36 +114,47 @@
                     if(x > t.x && x < t.x+targetWidth && y > t.y && y < t.y+targetHeight) {
                         dy = -dy;
                         t.status = 0;
+                        score++;
+                        if(score == targetRowCount*targetColumnCount) {
+                            alert("Congratulations! You Win!");
+                            document.location.reload();
+                        }
                     }
                 }
             }
         }
     }
+
+    function drawScore() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#0095DD";
+        ctx.fillText("Score: "+score, 8, 20);
+    }
+
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawTargets();
         drawBall();
         drawPaddle();
-        drawTargets();
+        drawScore();
         collisionDetection();
 
-        // Ball Movement
         if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
             dx = -dx;
         }
         if(y + dy < ballRadius) {
             dy = -dy;
-        } else if(y + dy > canvas.height-ballRadius) {
+        }
+        else if(y + dy > canvas.height-ballRadius) {
             if(x > paddleX && x < paddleX + paddleWidth) {
                 dy = -dy;
             }
             else {
-                alert("GAME OVER");
+                alert("Game Over");
                 document.location.reload();
-                clearInterval(interval); // Needed for Chrome to end game
             }
         }
 
-        // Paddle Movement
         if(rightPressed && paddleX < canvas.width-paddleWidth) {
             paddleX += 7;
         }
@@ -152,7 +166,7 @@
         y += dy;
     }
 
-    var interval = setInterval(draw, 10);
+    setInterval(draw, 10);
 </script>
 </body>
 </html>
