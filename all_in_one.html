@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Battle Planes</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #1C1C1C;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+        }
+
+        header h1 {
+            font-size: 40px;
+            margin: 0;
+        }
+
+        main {
+            margin: 100px 20px 20px 20px;
+        }
+
+        main h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        main p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: none;
+            grid-template-columns: repeat(var(--num-cols), 1fr);
+            grid-template-rows: repeat(var(--num-rows), 1fr);
+            grid-gap: 0;
+            max-width: 100%;
+        }
+
+        .grid div {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            height: 50px;
+            width: 50px;
+        }
+
+        .grid div.black {
+            background-color: #000;
+        }
+
+        .start-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 24px;
+            margin: 0 auto;
+            margin-top: 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            background-color: #3e8e41;
+        }
+
+        .stop-button {
+            background-color: #f44336;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 24px;
+            margin: 0 auto;
+            margin-top: 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .stop-button:hover {
+            background-color: #d32f2f;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <h1>Battle Planes</h1>
+</header>
+
+<main>
+    <h2>Instructions:</h2>
+    <p>Click on the cells to find the hidden plane parts before time elapses!</p>
+    <div class="grid" style="display:none;"></div>
+    <button class="start-button">Start Game</button>
+    <button class="stop-button" style="display:none;">Stop Game</button>
+</main>
+
+<script>
+    const GRID_ROWS = 10;
+    const GRID_COLS = 10;
+    const PLANE_PARTS = 3;
+
+    function createGrid() {
+        const grid = document.querySelector(".grid");
+
+        // Clear any existing cells
+        grid.innerHTML = "";
+
+        // Set the number of rows and columns
+        grid.style.setProperty("--num-rows", GRID_ROWS);
+        grid.style.setProperty("--num-cols", GRID_COLS);
+
+        // Add cells to the grid
+        for (let row = 0; row < GRID_ROWS; row++) {
+            for (let col = 0; col < GRID_COLS; col++) {
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.dataset.row = row;
+                cell.dataset.col = col;
+                grid.appendChild(cell);
+            }
+        }
+    }
+
+    function placePlaneParts() {
+        const cells = document.querySelectorAll(".cell");
+
+        // Clear any existing plane parts
+        cells.forEach((cell) => {
+            cell.classList.remove("plane-part");
+            cell.classList.remove("black");
+        });
+
+        // Select random cell to turn black
+        const blackIndex = Math.floor(Math.random() * GRID_ROWS * GRID_COLS);
+
+        // Add black class to selected cell
+        cells[blackIndex].classList.add("black");
+    }
+
+    function startGame() {
+        // show the grid
+        const grid = document.querySelector(".grid");
+        grid.style.display = "grid";
+
+        // change the button text and functionality
+        const button = document.querySelector(".start-button");
+        button.innerText = "Stop Game";
+        button.style.backgroundColor = "red"; // change button color to red
+        button.removeEventListener("click", startGame);
+        button.addEventListener("click", stopGame);
+
+        // place plane parts
+        placePlaneParts();
+    }
+
+    function stopGame() {
+        // hide the grid
+        const grid = document.querySelector(".grid");
+        grid.style.display = "none";
+
+        // change the button text and functionality
+        const button = document.querySelector(".start-button");
+        button.innerText = "Start Game";
+        button.style.backgroundColor = "#4CAF50"; // change button color back to green
+        button.removeEventListener("click", stopGame);
+        button.addEventListener("click", startGame);
+    }
+
+    // create grid on page load
+    window.addEventListener("load", createGrid);
+
+    // attach event listener to start button
+    const startButton = document.querySelector(".start-button");
+    startButton.addEventListener("click", startGame);
+</script>
+</body>
+</html>
