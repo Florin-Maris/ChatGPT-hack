@@ -23,7 +23,7 @@
     var paddleX = (canvas.width-paddleWidth)/2;
     var rightPressed = false;
     var leftPressed = false;
-    var targetRowCount = 6;
+    var targetRowCount = 1;
     var targetColumnCount = 8;
     var targetWidth = 50;
     var targetHeight = 20;
@@ -34,7 +34,6 @@
     var score = 0;
     var level = 1;
     var maxLevel = 5;
-    var targetRowCount = 6 + level;
 
     for (var c = 0; c < targetColumnCount; c++) {
         targets[c] = [];
@@ -128,7 +127,7 @@
                                 document.location.reload();
                             } else {
                                 level++;
-                                targetRowCount = 6 + level;
+                                targetRowCount ++;
                                 resetGame();
                             }
                         }
