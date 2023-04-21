@@ -88,23 +88,23 @@
     }
 
     function drawTargets() {
-        for(var c=0; c<targetColumnCount; c++) {
-            for(var r=0; r<targetRowCount; r++) {
-                if(targets[c][r].status == 1) {
-                    var targetX = (c*(targetWidth+targetPadding))+targetOffsetLeft;
-                    var targetY = (r*(targetHeight+targetPadding))+targetOffsetTop;
+        for (var c = 0; c < targetColumnCount; c++) {
+            for (var r = 0; r < targetRowCount; r++) {
+                if (targets[c][r].status == 1) {
+                    var targetX = (c * (targetWidth + targetPadding)) + targetOffsetLeft;
+                    var targetY = (r * (targetHeight + targetPadding)) + targetOffsetTop;
                     targets[c][r].x = targetX;
                     targets[c][r].y = targetY;
                     ctx.beginPath();
                     ctx.rect(targetX, targetY, targetWidth, targetHeight);
-                    if(r
-                        ctx.fillStyle = "#0095DD";
+                    ctx.fillStyle = "#0095DD";
                     ctx.fill();
                     ctx.closePath();
                 }
             }
         }
     }
+
 
     function collisionDetection() {
         for(var c=0; c<targetColumnCount; c++) {
