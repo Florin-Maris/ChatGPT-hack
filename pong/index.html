@@ -16,10 +16,10 @@
     var ballRadius = 10;
     var x = canvas.width/2;
     var y = canvas.height-30;
-    var dx = 2;
-    var dy = -2;
+    var dx = 6;
+    var dy = -6;
     var paddleHeight = 10;
-    var paddleWidth = 100; // Change this value to make the paddle wider
+    var paddleWidth = canvas.width; // Change this value to make the paddle wider
     var paddleX = (canvas.width-paddleWidth)/2;
     var rightPressed = false;
     var leftPressed = false;
@@ -44,7 +44,7 @@
 
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
-    document.addEventListener("mousemove", mouseMoveHandler, false);
+    // document.addEventListener("mousemove", mouseMoveHandler, false);
 
     function keyDownHandler(e) {
         if (e.keyCode == 39) {
