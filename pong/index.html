@@ -6,34 +6,36 @@
     <style>
         canvas {
             border: 1px solid #000;
+            background-color: #eee;
         }
     </style>
 </head>
 <body>
-<canvas id="myCanvas" width="480" height="320"></canvas>
+<canvas id="myCanvas" width="800" height="600"></canvas>
 
 <script>
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
+
     var ballRadius = 10;
     var x = canvas.width/2;
     var y = canvas.height-30;
     var dx = 2;
     var dy = -2;
+
     var paddleHeight = 10;
     var paddleWidth = 75;
     var paddleX = (canvas.width-paddleWidth)/2;
     var rightPressed = false;
     var leftPressed = false;
+
     var targetRowCount = 3;
     var targetColumnCount = 5;
-    var targetWidth = 50;
+    var targetWidth = 75;
     var targetHeight = 20;
     var targetPadding = 10;
     var targetOffsetTop = 30;
     var targetOffsetLeft = 30;
-    var score = 0;
-
     var targets = [];
     for(var c=0; c<targetColumnCount; c++) {
         targets[c] = [];
@@ -41,6 +43,8 @@
             targets[c][r] = { x: 0, y: 0, status: 1 };
         }
     }
+
+    var score = 0;
 
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
@@ -95,15 +99,21 @@
                     var targetY = (r*(targetHeight+targetPadding))+targetOffsetTop;
                     targets[c][r].x = targetX;
                     targets[c][r].y = targetY;
+
                     ctx.beginPath();
                     ctx.rect(targetX, targetY, targetWidth, targetHeight);
                     ctx.fillStyle = "#0095DD";
-
                     ctx.fill();
                     ctx.closePath();
                 }
             }
         }
+    }
+
+    function drawScore() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#0095DD";
+        ctx.fillText("Score: " + score, 8, 20);
     }
 
     function collisionDetection() {
@@ -116,19 +126,13 @@
                         t.status = 0;
                         score++;
                         if(score == targetRowCount*targetColumnCount) {
-                            alert("Congratulations! You Win!");
+                            alert("You win!");
                             document.location.reload();
                         }
                     }
                 }
             }
         }
-    }
-
-    function drawScore() {
-        ctx.font = "16px Arial";
-        ctx.fillStyle = "#0095DD";
-        ctx.fillText("Score: "+score, 8, 20);
     }
 
     function draw() {
@@ -164,9 +168,10 @@
 
         x += dx;
         y += dy;
+        requestAnimationFrame(draw);
     }
 
-    setInterval(draw, 10);
+    draw();
 </script>
 </body>
 </html>
