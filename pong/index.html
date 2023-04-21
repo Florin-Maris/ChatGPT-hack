@@ -90,7 +90,7 @@
     function drawTargets() {
         for (var c = 0; c < targetColumnCount; c++) {
             for (var r = 0; r < targetRowCount; r++) {
-                if (Math.random() >= 0.5 && targets[c][r].status == 1) {
+                if (targets[c][r].status == 1) {
                     var targetX = (c * (targetWidth + targetPadding)) + targetOffsetLeft;
                     var targetY = (r * (targetHeight + targetPadding)) + targetOffsetTop;
                     targets[c][r].x = targetX;
