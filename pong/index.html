@@ -3,44 +3,49 @@
 <head>
     <title>Ping Pong Game</title>
     <style>
-        #myCanvas {
-            border: 1px solid #000;
+        canvas {
+            border: 1px solid black;
+            background-color: #eee;
         }
     </style>
 </head>
 <body>
+<h1>Ping Pong Game</h1>
+<p>Use the left and right arrow keys to move the paddle and hit the targets.</p>
 <canvas id="myCanvas" width="800" height="600"></canvas>
-
 <script>
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
 
-    // Ball properties
+    // Ball variables
     var x = canvas.width/2;
     var y = canvas.height-30;
     var dx = 2;
     var dy = -2;
     var ballRadius = 10;
 
-    // Paddle properties
+    // Paddle variables
     var paddleHeight = 10;
     var paddleWidth = 75;
-    var paddleX = (canvas.width - paddleWidth)/2;
+    var paddleX = (canvas.width-paddleWidth)/2;
 
-    // Paddle control
+    // Input variables
     var rightPressed = false;
     var leftPressed = false;
 
-    // Target properties
+    // Target variables
     var targetRowCount = 4;
-    var targetColumnCount = 5;
-    var targetWidth = 75;
+    var targetColumnCount = 7;
+    var targetWidth = 50;
     var targetHeight = 20;
     var targetPadding = 10;
     var targetOffsetTop = 30;
     var targetOffsetLeft = 30;
 
-    // Target objects
+    // Score variable
+    var score = 0;
+
+    // Create targets array
     var targets = [];
     for (var c = 0; c < targetColumnCount; c++) {
         targets[c] = [];
@@ -49,27 +54,24 @@
         }
     }
 
-    // Score
-    var score = 0;
-
-    // Event listeners for arrow key control
+    // Event listeners
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
 
-    function keyDownHandler(event) {
-        if (event.keyCode == 39) {
+    function keyDownHandler(e) {
+        if (e.keyCode == 39) {
             rightPressed = true;
         }
-        else if (event.keyCode == 37) {
+        else if (e.keyCode == 37) {
             leftPressed = true;
         }
     }
 
-    function keyUpHandler(event) {
-        if (event.keyCode == 39) {
+    function keyUpHandler(e) {
+        if (e.keyCode == 39) {
             rightPressed = false;
         }
-        else if (event.keyCode == 37) {
+        else if (e.keyCode == 37) {
             leftPressed = false;
         }
     }
@@ -99,7 +101,8 @@
                     targets[c][r].x = targetX;
                     targets[c][r].y = targetY;
                     ctx.beginPath();
-                    ctx.rect(targetX, targetY, targetWidth, targetHeight);
+                    ctx.rect(targetX, targetY, targetWidth,
+                        targetHeight);
                     ctx.fillStyle = "#0095DD";
                     ctx.fill();
                     ctx.closePath();
@@ -107,29 +110,29 @@
             }
         }
     }
+    function drawScore() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#0095DD";
+        ctx.fillText("Score: " + score, 8, 20);
+    }
 
     function collisionDetection() {
         for (var c = 0; c < targetColumnCount; c++) {
             for (var r = 0; r < targetRowCount; r++) {
-                var target = targets[c][r];
-                if (target.status == 1) {
-                    if (x > target.x && x < target.x+targetWidth && y > target.y && y < target.y+targetHeight) {
+                var t = targets[c][r];
+                if (t.status == 1) {
+                    if (x > t.x && x < t.x+targetWidth && y > t.y && y < t.y+targetHeight) {
                         dy = -dy;
-                        target.status = 0;
+                        t.status = 0;
                         score++;
                         if (score == targetRowCount*targetColumnCount) {
-                            alert("You win!");
+                            alert("You win! Congratulations!");
                             document.location.reload();
                         }
                     }
                 }
             }
         }
-    }
-    function drawScore() {
-        ctx.font = "16px Arial";
-        ctx.fillStyle = "#0095DD";
-        ctx.fillText("Score: "+score, 8, 20);
     }
 
     function draw() {
@@ -140,7 +143,7 @@
         drawScore();
         collisionDetection();
 
-        // Ball movement
+        // Bounce off walls
         if (x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
             dx = -dx;
         }
@@ -152,12 +155,12 @@
                 dy = -dy;
             }
             else {
-                alert("Game over!");
+                alert("Game over. Your final score is " + score + ".");
                 document.location.reload();
             }
         }
 
-        // Paddle movement
+        // Move paddle
         if (rightPressed && paddleX < canvas.width-paddleWidth) {
             paddleX += 7;
         }
@@ -167,10 +170,9 @@
 
         x += dx;
         y += dy;
-        requestAnimationFrame(draw);
     }
 
-    draw();
+    setInterval(draw, 10);
 </script>
 </body>
 </html>
